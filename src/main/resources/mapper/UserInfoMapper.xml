@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.scy.scyspring.generator.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="org.scy.scyspring.core.domain.UserInfo">
+            <id property="uuid" column="uuid" jdbcType="VARCHAR"/>
+            <result property="username" column="userName" jdbcType="VARCHAR"/>
+            <result property="describes" column="describes" jdbcType="VARCHAR"/>
+            <result property="userphone" column="userPhone" jdbcType="VARCHAR"/>
+            <result property="birthday" column="birthday" jdbcType="DATE"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="sex" column="sex" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nickName" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uuid,userName,describes,
+        userPhone,birthday,age,
+        sex,nickName,email
+    </sql>
+</mapper>
