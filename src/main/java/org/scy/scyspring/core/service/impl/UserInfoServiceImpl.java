@@ -22,6 +22,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public UserInfo getUserInfoByUserName(String userName) {
+        log.info("getUserInfoByUserName:{}", userName);
         LambdaUpdateWrapper<UserInfo> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(UserInfo::getUsername, userName);
         return getOne(lambdaUpdateWrapper);

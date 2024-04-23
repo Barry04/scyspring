@@ -1,4 +1,4 @@
-package org.scy.scyspring.Controller;
+package org.scy.scyspring.controller;
 
 
 import org.scy.scyspring.core.domain.UserInfo;
