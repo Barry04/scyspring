@@ -47,9 +47,7 @@ public class AsyncServiceImpl implements AsyncService {
         // 判断是否指定在独立事务中执行且为true
         if (Objects.nonNull(aloneTransaction) && aloneTransaction) {
             // 使用事务模板执行任务，不返回任何结果
-            transactionTemplate.executeWithoutResult(status -> {
-                ExecutorsUtils.getFixedThreadPoolExecutor().execute(runnable);
-            });
+            transactionTemplate.executeWithoutResult(status -> ExecutorsUtils.getFixedThreadPoolExecutor().execute(runnable));
         } else {
             // 直接执行任务，不涉及事务
             ExecutorsUtils.getScheduledThreadPoolExecutor().execute(runnable);
