@@ -4,10 +4,6 @@
 <!-- "status" 属性用于设置日志记录器的状态，可以是 "ON" 或 "OFF"，这里设置为 "OFF" 表示关闭状态 -->
 <!-- "monitorInterval" 属性用于设置监控日志文件变化的间隔时间，单位为秒，这里设置为 30 秒 -->
 <Configuration status="OFF" monitorInterval="30">
-    <!--    <settings>-->
-    <!--        <settings item="logImpl">org.apache.logging.log4j.Log4j2</settings>-->
-    <!--    </settings>-->
-
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n"/>
@@ -55,12 +51,15 @@
     </Appenders>
 
     <Loggers>
-        <!-- 为MyBatis配置独立的Logger，记录到MyBatisFile appender -->
-        <!-- 调整MyBatis日志级别为info，以减少日志量，提高性能 -->
+        <!-- logger的name即代表了所记录的日志通常是包路径或者类的全限定名。在 log4j 的配置中，可以使用这个名称来控制日志的输出级别和输出目的地。
+        例如，name="scy.mybatis.org.scy.scyspring"表示这个 Logger 是针对包路径org.scy.scyspring下的类的日志记录器。 -->
+        <!-- 系统自身输出的日志配置独立的Logger，记录到selfConsoleFileAppender和selfConsole -->
         <Logger name="org.scy.scyspring" level="debug" additivity="false">
             <appender-ref ref="selfConsoleFileAppender"/>
             <appender-ref ref="selfConsole"/>
         </Logger>
+        <!-- 为MyBatis配置独立的Logger，记录到MyBatisFile appender -->
+        <!-- 调整MyBatis日志级别为info，以减少日志量，提高性能 -->
         <Logger name="org.scy.scyspring.core.mapper" level="debug" additivity="false">
             <appender-ref ref="MyBatisFileAppender"/>
             <appender-ref ref="MyBatisConsole"/>
