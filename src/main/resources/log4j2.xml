@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志配置文件，优化了日志记录的安全性、性能效率、可维护性和可扩展性 -->
+<!--     OFF FATAL、ERROR、WARN、INFO、DEBUG和TRACE。其中OFF级别最高，TRACE级别最低。Log接口提供输出不同级别消息的方法：-->
+<!-- "status" 属性用于设置日志记录器的状态，可以是 "ON" 或 "OFF"，这里设置为 "OFF" 表示关闭状态 -->
+<!-- "monitorInterval" 属性用于设置监控日志文件变化的间隔时间，单位为秒，这里设置为 30 秒 -->
+<Configuration status="OFF" monitorInterval="30">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" fileName="logs/console.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <Console name="MyBatisConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!-- 为MyBatis配置专用日志文件，增加了日志滚动策略 -->
+        <RollingFile name="MyBatisFileAppender" fileName="logs/mybatis.log"
+                     filePattern="logs/mybatis-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d [%t] %-5level %logger{36} - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- 默认日志配置，保持原有设置 -->
+        <Root level="info">
+            <appender-ref ref="Console"/>
+        </Root>
+        <!-- 控制log4j2自身的内部日志 -->
+        <Logger name="org.apache.logging.log4j" level="OFF" additivity="false"/>
+
+
+        <!-- 为MyBatis配置独立的Logger，记录到MyBatisFile appender -->
+        <!-- 调整MyBatis日志级别为info，以减少日志量，提高性能 -->
+        <Logger name="scy.mybatis.org.scy.scyspring" level="debug" additivity="false">
+            <appender-ref ref="MyBatisFileAppender"/>
+            <appender-ref ref="MyBatisConsole"/>
+        </Logger>
+        <!-- 禁用内部日志 -->
+        <Logger name="org.apache.logging" level="off"/>
+        <Logger name="org.apache.logging.log4j.status.StatusLogger" level="OFF"/>
+    </Loggers>
+</Configuration>
