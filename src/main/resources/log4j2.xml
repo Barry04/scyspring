@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 日志配置文件，优化了日志记录的安全性、性能效率、可维护性和可扩展性 -->
-<!--     OFF FATAL、ERROR、WARN、INFO、DEBUG和TRACE。其中OFF级别最高，TRACE级别最低。Log接口提供输出不同级别消息的方法：-->
+<!-- OFF FATAL、ERROR、WARN、INFO、DEBUG和TRACE。其中OFF级别最高，TRACE级别最低。Log接口提供输出不同级别消息的方法：-->
 <!-- "status" 属性用于设置日志记录器的状态，可以是 "ON" 或 "OFF"，这里设置为 "OFF" 表示关闭状态 -->
 <!-- "monitorInterval" 属性用于设置监控日志文件变化的间隔时间，单位为秒，这里设置为 30 秒 -->
 <Configuration status="OFF" monitorInterval="30">
+    <settings>
+        <setting name="logImpl" value="LOG4J2"/>
+    </settings>
+
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" fileName="logs/console.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
