@@ -4,23 +4,47 @@
 <!-- "status" 属性用于设置日志记录器的状态，可以是 "ON" 或 "OFF"，这里设置为 "OFF" 表示关闭状态 -->
 <!-- "monitorInterval" 属性用于设置监控日志文件变化的间隔时间，单位为秒，这里设置为 30 秒 -->
 <Configuration status="OFF" monitorInterval="30">
-    <settings>
-        <setting name="logImpl" value="LOG4J2"/>
-    </settings>
+    <!--    <settings>-->
+    <!--        <settings item="logImpl">org.apache.logging.log4j.Log4j2</settings>-->
+    <!--    </settings>-->
 
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT" fileName="logs/console.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n"/>
         </Console>
 
+        <RollingFile name="ConsoleFileAppender" fileName="logs/default.log"
+                     filePattern="logs/default-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d [%t] %-5level %logger{36} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+        </RollingFile>
+
         <Console name="MyBatisConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n"/>
         </Console>
         <!-- 为MyBatis配置专用日志文件，增加了日志滚动策略 -->
         <RollingFile name="MyBatisFileAppender" fileName="logs/mybatis.log"
                      filePattern="logs/mybatis-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
-                <pattern>%d [%t] %-5level %logger{36} - %msg%n</pattern>
+                <pattern>%d [%t] %-5level %logger{36} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+        </RollingFile>
+        <Console name="selfConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n"/>
+        </Console>
+        <RollingFile name="selfConsoleFileAppender" fileName="logs/self.log"
+                     filePattern="logs/self-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d [%t] %-5level %logger{36} - %m%n</pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -31,20 +55,26 @@
     </Appenders>
 
     <Loggers>
+        <!-- 为MyBatis配置独立的Logger，记录到MyBatisFile appender -->
+        <!-- 调整MyBatis日志级别为info，以减少日志量，提高性能 -->
+        <Logger name="org.scy.scyspring" level="debug" additivity="false">
+            <appender-ref ref="selfConsoleFileAppender"/>
+            <appender-ref ref="selfConsole"/>
+        </Logger>
+        <Logger name="org.scy.scyspring.core.mapper" level="debug" additivity="false">
+            <appender-ref ref="MyBatisFileAppender"/>
+            <appender-ref ref="MyBatisConsole"/>
+        </Logger>
+
         <!-- 默认日志配置，保持原有设置 -->
         <Root level="info">
             <appender-ref ref="Console"/>
+            <appender-ref ref="ConsoleFileAppender"/>
         </Root>
         <!-- 控制log4j2自身的内部日志 -->
         <Logger name="org.apache.logging.log4j" level="OFF" additivity="false"/>
 
 
-        <!-- 为MyBatis配置独立的Logger，记录到MyBatisFile appender -->
-        <!-- 调整MyBatis日志级别为info，以减少日志量，提高性能 -->
-        <Logger name="scy.mybatis.org.scy.scyspring" level="debug" additivity="false">
-            <appender-ref ref="MyBatisFileAppender"/>
-            <appender-ref ref="MyBatisConsole"/>
-        </Logger>
         <!-- 禁用内部日志 -->
         <Logger name="org.apache.logging" level="off"/>
         <Logger name="org.apache.logging.log4j.status.StatusLogger" level="OFF"/>
