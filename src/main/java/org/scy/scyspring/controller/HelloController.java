@@ -7,6 +7,7 @@ import org.scy.scyspring.core.service.UserInfoService;
 import org.scy.scyspring.utils.ExecutorsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,5 +45,16 @@ public class HelloController {
         asyncService.asyncAloneTransaction(runnable4, false);
         UserInfo byId = userInfoService.getById("1");
         return byId.getUsername();
+    }
+
+
+    @GetMapping(value = "getUserInfoByFuture")
+    public String getUserInfoByFuture(@RequestParam String userName) {
+        return userInfoService.getUserInfoByFuture(userName);
+    }
+
+    @GetMapping(value = "getUserByFuture")
+    public String getUserByFuture(@RequestParam String key) {
+        return userInfoService.getUserByFuture(key).toString();
     }
 }
