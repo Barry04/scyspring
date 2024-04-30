@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.scy.scyspring.generator.mapper.UserInfoMapper">
+<mapper namespace="org.scy.scyspring.core.mapper.UserInfoMapper">
 
     <resultMap id="BaseResultMap" type="org.scy.scyspring.core.domain.UserInfo">
             <id property="uuid" column="uuid" jdbcType="VARCHAR"/>

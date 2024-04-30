@@ -9,4 +9,6 @@ public interface AsyncService {
 
 
     void asyncAloneTransaction(Runnable runnable, Boolean aloneTransaction);
+
+    void asyncAloneTransactionMethod(Runnable runnable, Boolean aloneTransaction);
 }

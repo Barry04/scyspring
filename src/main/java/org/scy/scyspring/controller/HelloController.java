@@ -3,8 +3,10 @@ package org.scy.scyspring.controller;
 
 import org.scy.scyspring.core.domain.UserInfo;
 import org.scy.scyspring.core.service.AsyncService;
+import org.scy.scyspring.core.service.LogService;
 import org.scy.scyspring.core.service.UserInfoService;
-import org.scy.scyspring.utils.ExecutorsUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,37 +15,48 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
+    private static final Logger log = LoggerFactory.getLogger(HelloController.class);
     @Autowired
     private UserInfoService userInfoService;
 
     @Autowired
     private AsyncService asyncService;
 
+    @Autowired
+    private LogService logService;
+
     @GetMapping(value = "hellos")
     public String hello() {
-        UserInfo miuWaiLam = userInfoService.getUserInfoByUserName("Miu Wai Lam");
+        UserInfo miuWaiLam = userInfoService.getById("10");
         return miuWaiLam.toString();
     }
 
-    @GetMapping(value = "hello")
-    public String hello2() {
-
-        Runnable runnable1 = () -> asyncService.asyncMethod(1000L);
-        Runnable runnable2 = () -> asyncService.asyncMethod(100L);
-        Runnable runnable3 = () -> asyncService.asyncMethod(200L);
-
-        ExecutorsUtils.getFixedThreadPoolExecutor().execute(runnable1);
-        ExecutorsUtils.getFixedThreadPoolExecutor().execute(runnable2);
-        ExecutorsUtils.getFixedThreadPoolExecutor().execute(runnable3);
-
-        Runnable runnable4 = () -> {
-            userInfoService.removeById("1");
-            asyncService.asyncMethod(2000L);
-            throw new RuntimeException("my Error");
+    @GetMapping(value = "asyncAloneTransaction")
+    public String asyncAloneTransaction() {
+        Runnable runnable = () -> {
+            userInfoService.removeById("10");
+            asyncService.asyncMethod(5000L);
+            throw new RuntimeException("my asyncAloneTransaction Error");
         };
         // 调用异步方法，不使用独立事务。
-        asyncService.asyncAloneTransaction(runnable4, false);
-        UserInfo byId = userInfoService.getById("1");
+        asyncService.asyncAloneTransaction(runnable, true);
+        UserInfo byId = userInfoService.getById("10");
+        return byId.getUsername();
+    }
+
+
+    @GetMapping(value = "asyncAloneTransactionMethod")
+    public String asyncAloneTransactionMethod() {
+
+        Runnable runnable = () -> {
+
+            userInfoService.removeById("3");
+            asyncService.asyncMethod(5000L);
+
+        };
+        // 调用异步方法，不使用独立事务。
+        asyncService.asyncAloneTransactionMethod(runnable, true);
+        UserInfo byId = userInfoService.getById("2");
         return byId.getUsername();
     }
 
