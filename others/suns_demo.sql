@@ -78,3 +78,15 @@ INSERT INTO `user_info`
 VALUES ('9', 'Choi Lik Sun',
         'To start working with your server in Navicat, you should first establish a connection or several connections using the Connection window. Secure Sockets Layer(SSL) is a protocol for transmitting private documents via the Internet.',
         '159-7520-5311', '2011-08-17', 882, 'M', 'To Chung Yin', 'choi57@icloud.com');
+
+
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE `log`
+(
+    `uuid`   varchar(11) COLLATE utf8mb4_bin NOT NULL,
+    `msg`    varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+    `status` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+    PRIMARY KEY (`uuid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin;
