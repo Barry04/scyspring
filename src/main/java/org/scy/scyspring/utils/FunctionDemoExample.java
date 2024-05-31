@@ -49,12 +49,12 @@ public class FunctionDemoExample {
     }
 
 
-    private static <T> void addLog(SomeObj someObj, List<Log> logs) {
+    private static void addLog(SomeObj someObj, List<Log> logs) {
 
         process(someObj, logs, Log::new);
     }
 
-    private static <T> void addUserInfo(SomeObj someObj, List<UserInfo> userInfos) {
+    private static void addUserInfo(SomeObj someObj, List<UserInfo> userInfos) {
         process(someObj, userInfos, UserInfo::new);
     }
 
