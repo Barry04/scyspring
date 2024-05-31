@@ -31,6 +31,11 @@ public class Log implements Serializable {
      */
     private String status;
 
+    public Log(String msg, String status) {
+        this.msg = msg;
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -60,16 +65,14 @@ public class Log implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", uuid=").append(uuid);
-        sb.append(", msg=").append(msg);
-        sb.append(", status=").append(status);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return getClass().getSimpleName() +
+                " [" +
+                "Hash = " + hashCode() +
+                ", uuid=" + uuid +
+                ", msg=" + msg +
+                ", status=" + status +
+                ", serialVersionUID=" + serialVersionUID +
+                "]";
     }
 
 }
