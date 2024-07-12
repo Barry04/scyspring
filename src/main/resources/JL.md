@@ -29,11 +29,11 @@ icon:phone 18170360210
 
 - 熟练使用spring（spring，spring mvc，spring boot， spring cloud）、mybatis、dubbo 等框架；
 - 熟悉Java、Spring、MySQL、zk、redis等技术栈，能够进行Web应用的开发和维护。
+- 了解jvm原理，理解io、多线程、集合等基础框架，单元测试Junit-Test框架。
 - 熟练使用Linux系统、Shell脚本编程，有一定的Linux运维经验。
 - 熟练使用arthas跟踪客户现场的接口性能并根据接口耗时对接口进行优化。
 - 熟练使用Git进行版本控制，能够熟练使用Maven等项目构建工具。
 - 能简单优化sql查询语句，提升sql查询效率，对代码进行优化，优化接口响应速度。
-- 了解jvm原理，理解io、多线程、集合等基础框架，单元测试Junit-Test框架。
 
 ## 工作经历
 
