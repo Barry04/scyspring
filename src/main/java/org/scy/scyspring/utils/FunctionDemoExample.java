@@ -4,8 +4,9 @@ import org.scy.scyspring.core.domain.Log;
 import org.scy.scyspring.core.domain.SomeObj;
 import org.scy.scyspring.core.domain.UserInfo;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class FunctionDemoExample {
@@ -17,18 +18,18 @@ public class FunctionDemoExample {
      * @param args 命令行参数
      */
     public static void main(String[] args) {
-        SomeObj o = new SomeObj();
 
-        o.setUrl("www.baidu.com");
-        o.setUrlName("百度");
-        List<Log> logs = new ArrayList<>();
-        List<UserInfo> userInfos = new ArrayList<>();
+        Data data = new Data();
+        Map<String, Object> record = new HashMap<>();
+        record.put("name", "ss");
+        data.setRecord(record);
+        testExample(data);
+    }
 
-        addLog(o, logs);
-        addUserInfo(o, userInfos);
-
-        System.out.println("logs = " + logs);
-        System.out.println("userInfos = " + userInfos);
+    public static void testExample(Data data) {
+        Map<String, Object> record = new HashMap<>(data.getRecord());
+        System.out.println("record.get(\"name\") = " + record.get("name"));
+        record.remove("name");
 
     }
 

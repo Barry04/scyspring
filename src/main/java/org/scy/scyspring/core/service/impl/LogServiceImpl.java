@@ -14,14 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
  * @createDate 2024-04-28 16:28:25
  */
 @Component
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = Exception.class)
 public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
         implements LogService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertLog(Log log) {
         save(log);
+        removeLog(log);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removeLog(Log log) {
+        removeById(log.getUuid());
     }
 }
 
