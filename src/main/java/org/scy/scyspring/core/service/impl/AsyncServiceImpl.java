@@ -8,6 +8,7 @@ import org.scy.scyspring.core.service.LogService;
 import org.scy.scyspring.core.service.UserInfoService;
 import org.scy.scyspring.utils.ExecutorsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @Slf4j
 @Component
+@Scope("prototype")
 public class AsyncServiceImpl implements AsyncService {
 
     @Autowired
