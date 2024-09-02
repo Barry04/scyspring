@@ -1,6 +1,7 @@
 package org.scy.scyspring.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -8,6 +9,8 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * 自定义切面类，用于拦截controller层的方法执行
@@ -62,9 +65,27 @@ public class MyAspect {
 
     }
 
-    @AfterThrowing(value = "pointCut()", throwing = "e")
+
+    /**
+     * 对方法执行过程中抛出的异常进行拦截，并记录详细信息。
+     * 包括方法名称、异常信息、入参等。
+     *
+     * @param joinPoint AOP切点
+     * @param e         异常对象
+     */
+    @AfterThrowing(pointcut = "pointCut()", throwing = "e")
     public void afterThrowing(JoinPoint joinPoint, Throwable e) {
-        log.error("{} error: {}", joinPoint.getSignature().getName(), e.getMessage());
+        // 获取方法签名
+        String methodName = joinPoint.getSignature().getName();
+
+        // 获取入参列表
+        Object[] args = joinPoint.getArgs();
+
+        // 记录详细的异常信息
+        log.error("{} error: {}, Args: {}",
+                methodName,
+                ExceptionUtils.getStackTrace(e),
+                Arrays.toString(args)); // 打印入参信息
     }
 
 
