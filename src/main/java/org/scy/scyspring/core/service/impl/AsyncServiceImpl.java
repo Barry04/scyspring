@@ -56,40 +56,48 @@ public class AsyncServiceImpl implements AsyncService {
 
     }
 
-
     /**
-     * 异步执行一个任务，当选中在独立的事务中执行任务时，会使用事务管理器手动管理这个任务的事务，
-     * 当任务抛出异常时，事务会被回滚。
+     * 异步执行任务，根据是否需要独立事务来决定事务的处理方式
      *
-     * @param runnable         要执行的任务，实现了Runnable接口的对象。
-     * @param aloneTransaction 指示是否在独立的事务中执行任务的标志。
-     *                         如果为 true，则使用事务管理器在独立事务中执行；
-     *                         如果为 false 或者 null，则不使用事务管理器进行事务管理，直接执行任务。
+     * @param runnable        需要执行的任务
+     * @param aloneTransaction 是否需要独立事务
      */
-    @Async
-    @Override
     public void asyncAloneTransaction(Runnable runnable, Boolean aloneTransaction) {
-        if (Objects.nonNull(aloneTransaction) && aloneTransaction) {
-            // 创建一个新的事务定义
-            TransactionDefinition def = new DefaultTransactionDefinition();
-            // 获取当前事务的状态，如果当前没有事务，就新建一个事务
-            TransactionStatus status = transactionManager.getTransaction(def);
-            try {
-                // 运行任务
-                runnable.run();
-                // 任务完成后，提交事务
-                transactionManager.commit(status);
-            } catch (Exception e) {
-                // 如果任务抛出异常，回滚事务
-                transactionManager.rollback(status);
-                // 重新抛出异常
-                throw e;
-            }
+        if (Boolean.TRUE.equals(aloneTransaction)) {
+            // 独立事务逻辑
+            executeInTransaction(runnable, false);
         } else {
-            // 不需要事务的执行直接在线程池中执行
-            ExecutorsUtils.getScheduledThreadPoolExecutor().execute(runnable);
+            // 嵌套事务逻辑
+            executeInTransaction(() -> {
+                executeInTransaction(() -> {
+                    try {
+                        ExecutorsUtils.getScheduledThreadPoolExecutor().execute(runnable);
+                    } catch (Exception ex) {
+                        // 异常处理逻辑：如果在执行期间发生异常，回滚事务并重新抛出异常
+                        throw new RuntimeException("Error in async task execution", ex);
+                    }
+                }, true);  // 新事务中执行
+            }, true);  // 新事务中执行
         }
     }
+
+    private void executeInTransaction(Runnable runnable, boolean requiresNew) {
+        // 创建事务定义对象并根据需要设置传播行为
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        if (requiresNew) {
+            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        }
+
+        TransactionStatus status = transactionManager.getTransaction(def);
+        try {
+            runnable.run();  // 执行传入的任务
+            transactionManager.commit(status);  // 提交事务
+        } catch (Exception ex) {
+            transactionManager.rollback(status);  // 发生异常时回滚事务
+            throw ex;  // 重新抛出异常，以便上层处理
+        }
+    }
+
 
 
     @Override

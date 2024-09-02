@@ -7,6 +7,7 @@ import org.scy.scyspring.core.service.AsyncService;
 import org.scy.scyspring.core.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -30,11 +31,20 @@ public class TransactionServiceImpl {
         List<UserInfo> list = userInfoService.list();
         for (UserInfo userInfo : list) {
             try {
-
-                transactionServiceTwo.compile(userInfo);
+                extracted(userInfo);
             } catch (Exception e) {
                 log.error("error msg : {}", e.getMessage(), e);
             }
         }
+    }
+
+    @Transactional(propagation = Propagation.NESTED)
+    public void extracted(UserInfo userInfo) {
+        transactionServiceTwo.compile(userInfo);
+    }
+
+
+    List<UserInfo> getDescMatch(String key) {
+        return userInfoService.selectByDescribesMatchQuery(key);
     }
 }

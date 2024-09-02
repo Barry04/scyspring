@@ -21,4 +21,10 @@
         userPhone,birthday,age,
         sex,nickName,email
     </sql>
+    <select id="selectByDescribesMatchQuery" resultType="org.scy.scyspring.core.domain.UserInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from user_info
+        where FIND_IN_SET(#{matchDescText}, describes)
+    </select>
 </mapper>

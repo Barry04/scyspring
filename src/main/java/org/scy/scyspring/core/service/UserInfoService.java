@@ -3,6 +3,7 @@ package org.scy.scyspring.core.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.scy.scyspring.core.domain.UserInfo;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -19,4 +20,7 @@ public interface UserInfoService extends IService<UserInfo> {
 
 
     CompletableFuture<UserInfo> getUserByFuture(String key);
+
+    List<UserInfo> selectByDescribesMatchQuery(String matchDescText);
+
 }

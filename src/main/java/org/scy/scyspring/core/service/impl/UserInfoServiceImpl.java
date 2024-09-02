@@ -9,6 +9,7 @@ import org.scy.scyspring.core.service.UserInfoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -73,6 +74,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             return future;
         }
 
+    }
+
+    @Override
+    public List<UserInfo> selectByDescribesMatchQuery(String matchDescText) {
+        return baseMapper.selectByDescribesMatchQuery(matchDescText);
     }
 }
 

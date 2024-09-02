@@ -20,6 +20,7 @@ import java.util.List;
 public class HelloController {
 
     private static final Logger log = LoggerFactory.getLogger(HelloController.class);
+
     @Autowired
     private UserInfoService userInfoService;
 
@@ -32,9 +33,12 @@ public class HelloController {
     @Resource
     private TransactionServiceImpl transactionService;
 
-
     @GetMapping(value = "hellos")
     public String hello() {
+        log.debug("hello world");
+        log.info("hellos ");
+        log.error("errors");
+        log.warn("warn");
         UserInfo miuWaiLam = userInfoService.getById("10");
         return miuWaiLam.toString();
     }
@@ -98,5 +102,10 @@ public class HelloController {
     @GetMapping(value = "getUserByFuture")
     public String getUserByFuture(@RequestParam String key) {
         return userInfoService.getUserByFuture(key).toString();
+    }
+
+    @GetMapping(value = "getDescMatch")
+    public String getDescMatch(@RequestParam String key) {
+        return String.valueOf(userInfoService.selectByDescribesMatchQuery(key).size());
     }
 }
