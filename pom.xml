@@ -13,15 +13,26 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.7.11</spring-boot.version>
         <mybatisPlus.version>3.5.7</mybatisPlus.version>
+        <logback.version>1.4.11</logback.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.6</version>
+        </dependency>
 
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-        <!--        </dependency>-->
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- Apache Commons Lang 3 -->
         <dependency>
@@ -55,13 +66,13 @@
             <version>8.2.0</version>
             <scope>runtime</scope>
         </dependency>
+
         <!-- Oracle JDBC Driver -->
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
             <version>19.3.0.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,11 +88,10 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>jul-to-slf4j</artifactId> <!-- 移除 jul-to-slf4j 依赖 -->
+                    <artifactId>jul-to-slf4j</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
