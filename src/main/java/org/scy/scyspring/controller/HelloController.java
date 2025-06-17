@@ -1,6 +1,8 @@
 package org.scy.scyspring.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.scy.scyspring.core.domain.UserInfo;
 import org.scy.scyspring.core.service.AsyncService;
 import org.scy.scyspring.core.service.LogService;
@@ -9,9 +11,7 @@ import org.scy.scyspring.core.service.impl.TransactionServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -40,7 +40,7 @@ public class HelloController {
         log.error("errors");
         log.warn("warn");
         UserInfo miuWaiLam = userInfoService.getById("10");
-        return miuWaiLam.toString();
+        return JSON.toJSONString(miuWaiLam);
     }
 
     @GetMapping(value = "asyncAloneTransaction")
@@ -96,7 +96,22 @@ public class HelloController {
 
     @GetMapping(value = "getUserInfoByFuture")
     public String getUserInfoByFuture(@RequestParam String userName) {
-        return userInfoService.getUserInfoByFuture(userName);
+        return JSON.toJSONString(userInfoService.getUserInfoByFuture(userName));
+    }
+
+    @PostMapping(value = "getUserInfoByUserName")
+    public String getUserInfoByUserName(@RequestBody String userName) {
+        JSONObject object = JSON.parseObject(userName);
+        UserInfo name = userInfoService.getUserInfoByUserName(object.getString("userName"));
+        String temp = "{\"age\":66,\"birthday\":1679328000000,\"user_name\":\"Ray Rose\"}";
+        return temp;
+    }
+
+    @GetMapping(value = "getUserInfoByUserName")
+    public String getUserInfoByUserNames(@RequestBody String userName) {
+        JSONObject object = JSON.parseObject(userName);
+        String temp = "{\"age\":66,\"birthday\":1679328000000,\"user_name\":\"Ray Rose\"}";
+        return temp;
     }
 
     @GetMapping(value = "getUserByFuture")
